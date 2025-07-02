@@ -3,15 +3,18 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Plane, Hotel, Percent, ExternalLink } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export const TravelDeals = () => {
+  const navigate = useNavigate();
+
   // Mock travel deals data - in production this would come from CashKaro API
   const deals = [
     {
       brand_name: "MakeMyTrip",
       cashback: "12%",
       title: "Flight Bookings",
-      description: "Get up to 12% cashback on domestic and international flights",
+      description: "Score up to 12% cashback on domestic and international flights - because every rupee saved is a rupee earned for your next adventure! ✈️",
       category: "flights",
       terms_link: "#"
     },
@@ -19,7 +22,7 @@ export const TravelDeals = () => {
       brand_name: "Booking.com",
       cashback: "8%",
       title: "Hotel Reservations",
-      description: "Earn 8% cashback on hotel bookings worldwide",
+      description: "Get 8% cashback on hotel bookings worldwide. From budget stays to luxury resorts - we've got your back! 🏨",
       category: "hotels",
       terms_link: "#"
     },
@@ -27,7 +30,7 @@ export const TravelDeals = () => {
       brand_name: "Agoda",
       cashback: "10%",
       title: "Accommodation Deals",
-      description: "Save 10% on your next hotel or resort booking",
+      description: "Save 10% on your next hotel or resort booking. More savings = more travel experiences! 🌴",
       category: "hotels",
       terms_link: "#"
     },
@@ -35,23 +38,23 @@ export const TravelDeals = () => {
       brand_name: "Cleartrip",
       cashback: "15%",
       title: "Travel Packages",
-      description: "Special cashback on complete travel packages",
+      description: "Special cashback on complete travel packages. Let us handle the planning while you save big! 📦",
       category: "packages",
       terms_link: "#"
     },
     {
       brand_name: "Goibibo",
       cashback: "9%",
-      title: "Flight + Hotel",
-      description: "Combo deals with extra cashback on flight + hotel bookings",
+      title: "Flight + Hotel Combos",
+      description: "Combo deals with extra cashback on flight + hotel bookings. Double the savings, double the fun! 🎯",
       category: "combo",
       terms_link: "#"
     },
     {
       brand_name: "Yatra",
       cashback: "7%",
-      title: "Bus & Train",
-      description: "Cashback on bus and train ticket bookings",
+      title: "Bus & Train Tickets",
+      description: "Cashback on bus and train ticket bookings. Every journey counts, every saving matters! 🚆",
       category: "transport",
       terms_link: "#"
     }
@@ -87,15 +90,19 @@ export const TravelDeals = () => {
     }
   };
 
+  const handleViewAllOffers = () => {
+    navigate('/cards');
+  };
+
   return (
     <section className="py-20 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Exclusive Travel Deals Curated Just for You ✨
+            Exclusive Travel Deals That'll Make You Dance! 💃🕺
           </h2>
           <p className="text-xl text-gray-300">
-            Save more on your travel bookings with our partner cashback offers
+            Because who doesn't love saving money while planning their dream vacation? 🎉
           </p>
         </div>
 
@@ -109,7 +116,7 @@ export const TravelDeals = () => {
                 {/* Cashback Badge */}
                 <div className="absolute top-4 right-4 z-10">
                   <Badge className="bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold text-lg px-3 py-1">
-                    {deal.cashback} Cashback
+                    {deal.cashback} Cashback 🎁
                   </Badge>
                 </div>
 
@@ -149,7 +156,7 @@ export const TravelDeals = () => {
                     window.open('#', '_blank');
                   }}
                 >
-                  Get Deal
+                  Grab This Deal! 🔥
                 </Button>
               </CardContent>
             </Card>
@@ -159,9 +166,10 @@ export const TravelDeals = () => {
         {/* View All Offers CTA */}
         <div className="text-center mt-12">
           <Button 
+            onClick={handleViewAllOffers}
             className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-4 px-8 rounded-full text-lg"
           >
-            View All Offers
+            View All Offers 🌟 (50+ Deals Waiting!)
           </Button>
         </div>
       </div>

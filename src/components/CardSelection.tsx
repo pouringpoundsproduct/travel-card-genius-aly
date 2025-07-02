@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { Plane, Hotel, Coffee, Train } from "lucide-react";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 interface CardSelectionProps {
   onRecommendations: (preferences: any, cards: any[]) => void;
@@ -31,32 +31,7 @@ export const CardSelection = ({ onRecommendations }: CardSelectionProps) => {
   const handleGetRecommendations = async () => {
     setIsLoading(true);
     try {
-      // First get travel cards
-      const travelCardsResponse = await fetch('https://bk-api.bankkaro.com/sp/api/cards', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          slug: "best-travel-credit-card",
-          banks_ids: [],
-          card_networks: [],
-          annualFees: "",
-          credit_score: "",
-          sort_by: "",
-          free_cards: "",
-          eligiblityPayload: {},
-          cardGeniusPayload: {}
-        })
-      });
-
-      if (!travelCardsResponse.ok) {
-        throw new Error('Failed to fetch travel cards');
-      }
-
-      const travelCardsData = await travelCardsResponse.json();
-      
-      // Get personalized recommendations
+      // Build the payload for the Card Genius API
       const recommendationPayload = {
         amazon_spends: 1280,
         flipkart_spends: 10000,
@@ -107,23 +82,20 @@ export const CardSelection = ({ onRecommendations }: CardSelectionProps) => {
       }
 
       const personalizedData = await personalizedResponse.json();
-
-      // Combine and process the data
-      const combinedCards = [...(travelCardsData.data || []), ...(personalizedData.data || [])];
-      const topCards = combinedCards.slice(0, 5);
+      const topCards = personalizedData.savings?.slice(0, 5) || [];
 
       onRecommendations(preferences, topCards);
       
       toast({
-        title: "Success!",
-        description: "Found your perfect travel cards based on your preferences!",
+        title: "Boom! 💥",
+        description: "Found your perfect travel cards! Get ready to save big!",
       });
 
     } catch (error) {
       console.error('Error fetching recommendations:', error);
       toast({
-        title: "Error",
-        description: "Failed to get recommendations. Please try again.",
+        title: "Oops! 😅",
+        description: "Something went wrong. Don't worry, let's try again!",
         variant: "destructive",
       });
     } finally {
@@ -132,31 +104,31 @@ export const CardSelection = ({ onRecommendations }: CardSelectionProps) => {
   };
 
   return (
-    <section id="card-selection" className="py-20 px-6">
+    <section id="card-selection" className="py-16 px-6">
       <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Tell Us About Your Travel Style
+        <div className="text-center mb-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
+            Quick Travel Style Check! ✈️
           </h2>
-          <p className="text-xl text-gray-300">
-            Help us find the perfect travel cards tailored to your spending habits
+          <p className="text-lg text-gray-300">
+            Just slide to tell us about your travel habits (takes 30 seconds!) 
           </p>
         </div>
 
         <Card className="bg-white/10 backdrop-blur-lg border-white/20 text-white">
-          <CardHeader>
-            <CardTitle className="text-2xl text-center text-white">
-              Customize Your Preferences
+          <CardHeader className="pb-4">
+            <CardTitle className="text-xl text-center text-white">
+              Customize Your Travel Profile 🎯
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-8">
+          <CardContent className="space-y-6">
             {/* Hotels Annual Spend */}
-            <div className="space-y-4">
+            <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 <Hotel className="h-5 w-5 text-blue-400" />
-                <label className="text-lg font-medium">Annual Hotel Spending</label>
+                <label className="font-medium">How much do you spend on hotels yearly?</label>
               </div>
-              <div className="px-4">
+              <div className="px-2">
                 <Slider
                   value={preferences.hotels_annual}
                   onValueChange={(value) => handleSliderChange('hotels_annual', value)}
@@ -165,21 +137,21 @@ export const CardSelection = ({ onRecommendations }: CardSelectionProps) => {
                   step={5000}
                   className="w-full"
                 />
-                <div className="flex justify-between text-sm text-gray-300 mt-2">
-                  <span>₹10,000</span>
+                <div className="flex justify-between text-sm text-gray-300 mt-1">
+                  <span>₹10K</span>
                   <span className="font-bold text-blue-400">₹{preferences.hotels_annual[0].toLocaleString()}</span>
-                  <span>₹2,00,000</span>
+                  <span>₹2L</span>
                 </div>
               </div>
             </div>
 
             {/* Flights Annual Spend */}
-            <div className="space-y-4">
+            <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 <Plane className="h-5 w-5 text-purple-400" />
-                <label className="text-lg font-medium">Annual Flight Spending</label>
+                <label className="font-medium">Annual flight bookings budget?</label>
               </div>
-              <div className="px-4">
+              <div className="px-2">
                 <Slider
                   value={preferences.flights_annual}
                   onValueChange={(value) => handleSliderChange('flights_annual', value)}
@@ -188,90 +160,81 @@ export const CardSelection = ({ onRecommendations }: CardSelectionProps) => {
                   step={5000}
                   className="w-full"
                 />
-                <div className="flex justify-between text-sm text-gray-300 mt-2">
-                  <span>₹15,000</span>
+                <div className="flex justify-between text-sm text-gray-300 mt-1">
+                  <span>₹15K</span>
                   <span className="font-bold text-purple-400">₹{preferences.flights_annual[0].toLocaleString()}</span>
-                  <span>₹3,00,000</span>
+                  <span>₹3L</span>
                 </div>
               </div>
             </div>
 
-            {/* Domestic Lounge Access */}
-            <div className="space-y-4">
-              <div className="flex items-center space-x-3">
-                <Coffee className="h-5 w-5 text-green-400" />
-                <label className="text-lg font-medium">Domestic Lounge Visits (Quarterly)</label>
-              </div>
-              <div className="px-4">
+            {/* Compact Lounge Section */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Domestic Lounge */}
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2">
+                  <Coffee className="h-4 w-4 text-green-400" />
+                  <label className="text-sm font-medium">Domestic Lounge Visits/Quarter</label>
+                </div>
                 <Slider
                   value={preferences.domestic_lounge_usage_quarterly}
                   onValueChange={(value) => handleSliderChange('domestic_lounge_usage_quarterly', value)}
-                  max={50}
-                  min={0}
-                  step={1}
-                  className="w-full"
-                />
-                <div className="flex justify-between text-sm text-gray-300 mt-2">
-                  <span>0</span>
-                  <span className="font-bold text-green-400">{preferences.domestic_lounge_usage_quarterly[0]} visits</span>
-                  <span>50</span>
-                </div>
-              </div>
-            </div>
-
-            {/* International Lounge Access */}
-            <div className="space-y-4">
-              <div className="flex items-center space-x-3">
-                <Coffee className="h-5 w-5 text-yellow-400" />
-                <label className="text-lg font-medium">International Lounge Visits (Quarterly)</label>
-              </div>
-              <div className="px-4">
-                <Slider
-                  value={preferences.international_lounge_usage_quarterly}
-                  onValueChange={(value) => handleSliderChange('international_lounge_usage_quarterly', value)}
                   max={30}
                   min={0}
                   step={1}
                   className="w-full"
                 />
-                <div className="flex justify-between text-sm text-gray-300 mt-2">
-                  <span>0</span>
-                  <span className="font-bold text-yellow-400">{preferences.international_lounge_usage_quarterly[0]} visits</span>
-                  <span>30</span>
+                <div className="text-center">
+                  <span className="font-bold text-green-400 text-sm">{preferences.domestic_lounge_usage_quarterly[0]} visits</span>
                 </div>
               </div>
-            </div>
 
-            {/* Railway Lounge Access */}
-            <div className="space-y-4">
-              <div className="flex items-center space-x-3">
-                <Train className="h-5 w-5 text-red-400" />
-                <label className="text-lg font-medium">Railway Lounge Visits (Quarterly)</label>
-              </div>
-              <div className="px-4">
+              {/* International Lounge */}
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2">
+                  <Coffee className="h-4 w-4 text-yellow-400" />
+                  <label className="text-sm font-medium">International Lounge Visits/Quarter</label>
+                </div>
                 <Slider
-                  value={preferences.railway_lounge_usage_quarterly}
-                  onValueChange={(value) => handleSliderChange('railway_lounge_usage_quarterly', value)}
+                  value={preferences.international_lounge_usage_quarterly}
+                  onValueChange={(value) => handleSliderChange('international_lounge_usage_quarterly', value)}
                   max={20}
                   min={0}
                   step={1}
                   className="w-full"
                 />
-                <div className="flex justify-between text-sm text-gray-300 mt-2">
-                  <span>0</span>
-                  <span className="font-bold text-red-400">{preferences.railway_lounge_usage_quarterly[0]} visits</span>
-                  <span>20</span>
+                <div className="text-center">
+                  <span className="font-bold text-yellow-400 text-sm">{preferences.international_lounge_usage_quarterly[0]} visits</span>
                 </div>
               </div>
             </div>
 
-            <div className="pt-6 text-center">
+            {/* Railway Lounge - Compact */}
+            <div className="space-y-2">
+              <div className="flex items-center space-x-2">
+                <Train className="h-4 w-4 text-red-400" />
+                <label className="text-sm font-medium">Railway Lounge Usage (Quarterly)</label>
+              </div>
+              <div className="flex items-center space-x-4">
+                <Slider
+                  value={preferences.railway_lounge_usage_quarterly}
+                  onValueChange={(value) => handleSliderChange('railway_lounge_usage_quarterly', value)}
+                  max={15}
+                  min={0}
+                  step={1}
+                  className="flex-1"
+                />
+                <span className="font-bold text-red-400 text-sm min-w-[60px]">{preferences.railway_lounge_usage_quarterly[0]} visits</span>
+              </div>
+            </div>
+
+            <div className="pt-4 text-center">
               <Button 
                 onClick={handleGetRecommendations}
                 disabled={isLoading}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-4 px-12 rounded-full text-lg transform transition-all duration-300 hover:scale-105"
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-4 px-8 rounded-full text-lg transform transition-all duration-300 hover:scale-105"
               >
-                {isLoading ? 'Finding Your Cards...' : 'Get My Best Card'}
+                {isLoading ? 'Finding Your Perfect Cards... 🔍' : 'Get My Dream Cards! 🚀'}
               </Button>
             </div>
           </CardContent>

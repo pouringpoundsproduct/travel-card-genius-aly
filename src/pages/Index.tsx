@@ -1,5 +1,6 @@
 
 import { Hero } from "@/components/Hero";
+import { TopTravelCards } from "@/components/TopTravelCards";
 import { CardSelection } from "@/components/CardSelection";
 import { RecommendedCards } from "@/components/RecommendedCards";
 import { TravelDeals } from "@/components/TravelDeals";
@@ -23,6 +24,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-blue-900 to-slate-900">
       <Hero />
+      <TopTravelCards />
       <CardSelection onRecommendations={handleCardRecommendations} />
       {showRecommendations && <RecommendedCards cards={recommendedCards} />}
       <TravelDeals />
