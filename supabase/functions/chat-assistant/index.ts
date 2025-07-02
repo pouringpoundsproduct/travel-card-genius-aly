@@ -18,28 +18,54 @@ serve(async (req) => {
   try {
     const { message } = await req.json();
 
-    // Create a travel credit card expert persona for Aly
-    const systemPrompt = `You are Aly Hajiani's AI assistant, an expert in travel credit cards, cashback deals, and travel hacking. 
+    // First, try to get relevant card information from BankKaro API
+    let cardContext = '';
+    try {
+      const cardsResponse = await fetch('https://bk-api.bankkaro.com/sp/api/cards', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          slug: "best-travel-credit-card",
+          banks_ids: [],
+          card_networks: [],
+          annualFees: "",
+          credit_score: "",
+          sort_by: "",
+          free_cards: "",
+          eligiblityPayload: {},
+          cardGeniusPayload: {}
+        })
+      });
 
-Your personality:
-- Friendly, knowledgeable, and enthusiastic about travel
-- Provide practical, actionable advice
-- Focus on travel credit cards, lounge access, cashback, and travel deals
-- Keep responses concise but informative
-- Use travel and credit card emojis appropriately
-- Always mention specific benefits like "no forex fees", "lounge access", "travel insurance"
+      if (cardsResponse.ok) {
+        const cardsData = await cardsResponse.json();
+        const cards = cardsData.data?.cards || [];
+        
+        // Create a relevant context string from the cards data
+        cardContext = `\n\nHere's information about available travel credit cards:\n` +
+          cards.slice(0, 10).map((card: any) => {
+            return `${card.name} - Annual Fee: ${card.joining_fee_text || 'N/A'}, Rating: ${card.rating || 'N/A'}/5, Type: ${card.card_type || 'N/A'}, Commission: ${card.commission || '0'} ${card.commission_type || ''}`;
+          }).join('\n');
+      }
+    } catch (error) {
+      console.log('Failed to fetch cards data, falling back to OpenAI only');
+    }
+
+    // Create system prompt with context
+    const systemPrompt = `You are Aly's travel assistant, a friendly and knowledgeable AI that helps travelers find the perfect credit cards and travel deals. 
 
 Your expertise includes:
-- Travel credit card recommendations
-- Cashback and reward optimization
-- Airport lounge access strategies  
-- Travel insurance benefits
-- Foreign exchange savings
-- Hotel and flight booking strategies
-- Credit card approval tips
-- Annual fee vs benefits analysis
+- Travel credit cards and their benefits
+- Cashback and reward programs
+- Travel deals and offers
+- Airport lounges and travel perks
+- Smart spending strategies for travelers
 
-Keep responses under 150 words and always be helpful and encouraging about travel goals.`;
+Always respond in a helpful, friendly tone with emojis. Keep responses concise but informative. If asked about specific cards, refer to the card information provided in the context.
+
+If you don't have specific information about a card or deal, be honest about it and offer to help find alternatives.${cardContext}`;
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -53,24 +79,30 @@ Keep responses under 150 words and always be helpful and encouraging about trave
           { role: 'system', content: systemPrompt },
           { role: 'user', content: message }
         ],
-        max_tokens: 200,
+        max_tokens: 500,
         temperature: 0.7,
       }),
     });
 
+    if (!response.ok) {
+      throw new Error('Failed to get response from OpenAI');
+    }
+
     const data = await response.json();
-    const aiResponse = data.choices[0].message.content;
+    const aiResponse = data.choices[0]?.message?.content || "I'm here to help with travel cards and deals! Could you please rephrase your question?";
 
     return new Response(JSON.stringify({ response: aiResponse }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
+
   } catch (error) {
     console.error('Error in chat-assistant function:', error);
-    return new Response(JSON.stringify({ 
-      error: 'Failed to get AI response',
-      response: "Sorry, I'm having trouble right now. Feel free to ask me about travel credit cards, cashback offers, or any travel-related questions! ✈️"
-    }), {
-      status: 500,
+    
+    // Fallback response
+    const fallbackResponse = "Hey there! 👋 I'm having a small technical hiccup, but I'm still here to help! Ask me about travel credit cards, cashback offers, or the best deals for your next adventure! ✈️";
+    
+    return new Response(JSON.stringify({ response: fallbackResponse }), {
+      status: 200, // Still return 200 to avoid UI errors
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }

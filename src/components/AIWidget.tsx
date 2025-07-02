@@ -30,7 +30,7 @@ export const AIWidget = () => {
 
     try {
       // Call our edge function to get AI response
-      const response = await fetch('/api/chat-assistant', {
+      const response = await fetch('/functions/v1/chat-assistant', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

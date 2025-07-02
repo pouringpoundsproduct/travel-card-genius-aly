@@ -82,7 +82,7 @@ export const CardSelection = ({ onRecommendations }: CardSelectionProps) => {
       }
 
       const personalizedData = await personalizedResponse.json();
-      const topCards = personalizedData.savings?.slice(0, 5) || [];
+      const topCards = personalizedData.savings?.slice(0, 6) || [];
 
       onRecommendations(preferences, topCards);
       
