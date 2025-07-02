@@ -4,32 +4,46 @@ import { Button } from "@/components/ui/button";
 import { Instagram, ExternalLink, Heart, MessageCircle, Share } from "lucide-react";
 
 export const SocialProof = () => {
-  // Aly Hajiani's Instagram posts
+  // Aly Hajiani's Instagram reels
   const instagramPosts = [
     {
       id: 1,
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face",
-      caption: "Just landed in Dubai with my premium travel card! Free lounge access made the layover so comfortable ✈️ #TravelHacks #CreditCards",
-      likes: 2840,
-      comments: 156,
-      timestamp: "2 days ago"
+      reelUrl: "https://www.instagram.com/reel/DLl1kSVi-PV/",
+      thumbnail: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
+      caption: "Credit card strategies that actually work! 💳 Watch how I maximize rewards on every purchase. #CreditCardHacks #TravelRewards",
+      likes: 5240,
+      comments: 234,
+      timestamp: "1 day ago"
     },
     {
       id: 2,
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face",
-      caption: "Maldives here I come! 🏝️ Saved ₹25,000 on this trip using the right travel card rewards. DM for card recommendations! #ThatCreditCardGuy",
-      likes: 4521,
-      comments: 289,
-      timestamp: "5 days ago"
+      reelUrl: "https://www.instagram.com/reel/DLbxMtiONo2/",
+      thumbnail: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
+      caption: "Airport lounge access with the right travel cards! ✈️ See which cards give you premium access worldwide. #AirportLounge #TravelPerks",
+      likes: 7891,
+      comments: 456,
+      timestamp: "3 days ago"
     },
     {
       id: 3,
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face",
-      caption: "Pro tip: Always use travel cards for international purchases! Zero forex fees = more money for experiences 💰 #SmartTravel #CreditCardExpert",
-      likes: 1923,
-      comments: 98,
-      timestamp: "1 week ago"
+      reelUrl: "https://www.instagram.com/reel/DLY9F7TCZEk/",
+      thumbnail: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
+      caption: "Forex fees are killing your travel budget! 💸 Learn which cards offer zero forex charges and save thousands. #ZeroForex #TravelSmart",
+      likes: 3672,
+      comments: 189,
+      timestamp: "5 days ago"
     }
+  ];
+
+  const publicationLogos = [
+    { name: "Economic Times", logo: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=200&h=80&fit=crop" },
+    { name: "Business Standard", logo: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=200&h=80&fit=crop" },
+    { name: "Mint", logo: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=200&h=80&fit=crop" },
+    { name: "MoneyControl", logo: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=200&h=80&fit=crop" },
+    { name: "Forbes India", logo: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=200&h=80&fit=crop" },
+    { name: "Bloomberg Quint", logo: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=200&h=80&fit=crop" },
+    { name: "Financial Express", logo: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=200&h=80&fit=crop" },
+    { name: "The Hindu", logo: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=200&h=80&fit=crop" }
   ];
 
   return (
@@ -59,8 +73,8 @@ export const SocialProof = () => {
               {/* Instagram Post Image */}
               <div className="relative overflow-hidden">
                 <img 
-                  src={post.image} 
-                  alt={`Instagram post ${post.id}`}
+                  src={post.thumbnail} 
+                  alt={`Instagram reel ${post.id}`}
                   className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 
@@ -105,19 +119,45 @@ export const SocialProof = () => {
                   <span>{post.timestamp}</span>
                 </div>
 
-                {/* View on Instagram Button */}
+                {/* View Reel Button */}
                 <Button 
                   variant="outline" 
                   size="sm"
                   className="w-full border-pink-400/30 text-pink-300 hover:bg-pink-400/10 hover:text-pink-200"
-                  onClick={() => window.open('https://www.instagram.com/thatcreditcardguy/', '_blank')}
+                  onClick={() => window.open(post.reelUrl, '_blank')}
                 >
                   <Instagram className="h-4 w-4 mr-2" />
-                  View on Instagram
+                  Watch Reel
                 </Button>
               </CardContent>
             </Card>
           ))}
+        </div>
+
+        {/* Media Coverage Section */}
+        <div className="mt-20 text-center">
+          <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
+            Trusted by Leading Publications
+          </h3>
+          <p className="text-gray-300 mb-8">
+            Aly's expertise has been featured across India's top financial publications
+          </p>
+          
+          {/* Publications Horizontal Scroll */}
+          <div className="relative overflow-hidden">
+            <div className="flex animate-scroll space-x-8 py-4">
+              {[...publicationLogos, ...publicationLogos].map((publication, index) => (
+                <div 
+                  key={`${publication.name}-${index}`}
+                  className="flex-shrink-0 bg-white/10 backdrop-blur-sm rounded-lg p-4 h-20 w-40 flex items-center justify-center"
+                >
+                  <span className="text-white font-semibold text-sm text-center">
+                    {publication.name}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Follow CTA */}
