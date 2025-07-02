@@ -150,7 +150,7 @@ const Cards = () => {
         <Button 
           onClick={() => navigate('/')}
           variant="outline"
-          className="mb-6 border-white/30 text-white hover:bg-white/10"
+          className="mb-6 border-blue-400/50 text-blue-300 hover:bg-blue-500/20 hover:border-blue-300"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Home
@@ -303,7 +303,7 @@ const Cards = () => {
                   
                   <Button 
                     variant="outline"
-                    className="w-full border-white/30 text-white hover:bg-white/10 py-2 text-sm"
+                    className="w-full border-blue-400/50 text-blue-300 hover:bg-blue-500/20 hover:border-blue-300 py-2 text-sm"
                     onClick={() => navigate(`/card/${card.id}`)}
                   >
                     <ExternalLink className="h-3 w-3 mr-1" />

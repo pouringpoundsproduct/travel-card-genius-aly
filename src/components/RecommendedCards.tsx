@@ -129,7 +129,7 @@ export const RecommendedCards = ({ cards }: RecommendedCardsProps) => {
         <div className="text-center mt-12">
           <Button 
             variant="outline" 
-            className="border-white/30 text-white hover:bg-white/10 px-8 py-3"
+            className="border-blue-400/50 text-blue-300 hover:bg-blue-500/20 hover:border-blue-300 px-8 py-3"
           >
             View All Travel Cards
           </Button>

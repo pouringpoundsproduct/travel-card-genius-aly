@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
-import { Plane, Hotel, Coffee, Train } from "lucide-react";
+import { Plane, Hotel, Coffee } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface CardSelectionProps {
@@ -16,8 +16,7 @@ export const CardSelection = ({ onRecommendations }: CardSelectionProps) => {
     hotels_annual: [50000],
     flights_annual: [75000],
     domestic_lounge_usage_quarterly: [10],
-    international_lounge_usage_quarterly: [5],
-    railway_lounge_usage_quarterly: [2]
+    international_lounge_usage_quarterly: [5]
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -31,41 +30,12 @@ export const CardSelection = ({ onRecommendations }: CardSelectionProps) => {
   const handleGetRecommendations = async () => {
     setIsLoading(true);
     try {
-      // Build the payload for the Card Genius API
+      // Build the simplified payload for the Card Genius API
       const recommendationPayload = {
-        amazon_spends: 1280,
-        flipkart_spends: 10000,
-        grocery_spends_online: 7500,
-        online_food_ordering: 5000,
-        other_online_spends: 3000,
-        other_offline_spends: 5000,
-        dining_or_going_out: 5000,
-        fuel: 5000,
-        school_fees: 20000,
-        rent: 35000,
-        mobile_phone_bills: 1500,
-        electricity_bills: 7500,
-        water_bills: 2500,
-        ott_channels: 1000,
-        new_monthly_cat_1: 0,
-        new_monthly_cat_2: 0,
-        new_monthly_cat_3: 0,
         hotels_annual: preferences.hotels_annual[0],
         flights_annual: preferences.flights_annual[0],
-        insurance_health_annual: 75000,
-        insurance_car_or_bike_annual: 45000,
-        large_electronics_purchase_like_mobile_tv_etc: 100000,
-        all_pharmacy: 99,
-        new_cat_1: 0,
-        new_cat_2: 0,
-        new_cat_3: 0,
         domestic_lounge_usage_quarterly: preferences.domestic_lounge_usage_quarterly[0],
         international_lounge_usage_quarterly: preferences.international_lounge_usage_quarterly[0],
-        railway_lounge_usage_quarterly: preferences.railway_lounge_usage_quarterly[0],
-        movie_usage: 3,
-        movie_mov: 600,
-        dining_usage: 3,
-        dining_mov: 1500,
         selected_card_id: null
       };
 
@@ -209,24 +179,6 @@ export const CardSelection = ({ onRecommendations }: CardSelectionProps) => {
               </div>
             </div>
 
-            {/* Railway Lounge - Compact */}
-            <div className="space-y-2">
-              <div className="flex items-center space-x-2">
-                <Train className="h-4 w-4 text-red-400" />
-                <label className="text-sm font-medium">Railway Lounge Usage (Quarterly)</label>
-              </div>
-              <div className="flex items-center space-x-4">
-                <Slider
-                  value={preferences.railway_lounge_usage_quarterly}
-                  onValueChange={(value) => handleSliderChange('railway_lounge_usage_quarterly', value)}
-                  max={15}
-                  min={0}
-                  step={1}
-                  className="flex-1"
-                />
-                <span className="font-bold text-red-400 text-sm min-w-[60px]">{preferences.railway_lounge_usage_quarterly[0]} visits</span>
-              </div>
-            </div>
 
             <div className="pt-4 text-center">
               <Button 
