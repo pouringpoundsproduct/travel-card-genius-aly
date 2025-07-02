@@ -30,10 +30,11 @@ export const AIWidget = () => {
 
     try {
       // Call our edge function to get AI response
-      const response = await fetch('/functions/v1/chat-assistant', {
+      const response = await fetch('https://sxxwrrlvneupflclrkzz.functions.supabase.co/chat-assistant', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN4eHdycmx2bmV1cGZsY2xya3p6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE0MzkyMDIsImV4cCI6MjA2NzAxNTIwMn0.SBAKDHf96vZs5-HfOhEK2NVijj0PgUutbX_r-pkCTFc'}`,
         },
         body: JSON.stringify({ message: userMessage }),
       });
