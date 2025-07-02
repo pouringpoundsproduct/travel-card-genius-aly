@@ -144,7 +144,7 @@ export const CardSelection = ({ onRecommendations }: CardSelectionProps) => {
               <div className="space-y-2">
                 <div className="flex items-center space-x-2">
                   <Coffee className="h-4 w-4 text-green-400" />
-                  <label className="text-sm font-medium">Domestic Lounge Visits/Quarter</label>
+                  <label className="text-sm font-medium">Domestic Lounge Visits Annually</label>
                 </div>
                 <Slider
                   value={preferences.domestic_lounge_usage_quarterly}
@@ -163,7 +163,7 @@ export const CardSelection = ({ onRecommendations }: CardSelectionProps) => {
               <div className="space-y-2">
                 <div className="flex items-center space-x-2">
                   <Coffee className="h-4 w-4 text-yellow-400" />
-                  <label className="text-sm font-medium">International Lounge Visits/Quarter</label>
+                  <label className="text-sm font-medium">International Lounge Visits Annually</label>
                 </div>
                 <Slider
                   value={preferences.international_lounge_usage_quarterly}

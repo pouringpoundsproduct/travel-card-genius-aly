@@ -55,7 +55,9 @@ export const TopTravelCards = () => {
       if (!response.ok) throw new Error('Failed to fetch cards');
       
       const data = await response.json();
-      setCards(data.data?.cards?.slice(0, 4) || []);
+      // Filter cards with rating 5 and sort by rating
+      const filteredCards = data.data?.cards?.filter((card: TravelCard) => card.rating === 5) || [];
+      setCards(filteredCards.slice(0, 4));
     } catch (error) {
       console.error('Error fetching cards:', error);
     } finally {

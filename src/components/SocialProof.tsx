@@ -4,28 +4,28 @@ import { Button } from "@/components/ui/button";
 import { Instagram, ExternalLink, Heart, MessageCircle, Share } from "lucide-react";
 
 export const SocialProof = () => {
-  // Mock Instagram posts - in production, these would be fetched from Instagram API
+  // Aly Hajiani's Instagram posts
   const instagramPosts = [
     {
       id: 1,
-      image: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400&h=400&fit=crop",
-      caption: "Just landed in Dubai with my premium travel card! Free lounge access made the layover so comfortable ✈️ #TravelHacks",
+      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face",
+      caption: "Just landed in Dubai with my premium travel card! Free lounge access made the layover so comfortable ✈️ #TravelHacks #CreditCards",
       likes: 2840,
       comments: 156,
       timestamp: "2 days ago"
     },
     {
       id: 2,
-      image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=400&fit=crop",
-      caption: "Maldives here I come! 🏝️ Saved ₹25,000 on this trip using the right travel card rewards. DM for card recommendations!",
+      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face",
+      caption: "Maldives here I come! 🏝️ Saved ₹25,000 on this trip using the right travel card rewards. DM for card recommendations! #ThatCreditCardGuy",
       likes: 4521,
       comments: 289,
       timestamp: "5 days ago"
     },
     {
       id: 3,
-      image: "https://images.unsplash.com/photo-1539650116574-75c0c6d73f6e?w=400&h=400&fit=crop",
-      caption: "Pro tip: Always use travel cards for international purchases! Zero forex fees = more money for experiences 💰 #SmartTravel",
+      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face",
+      caption: "Pro tip: Always use travel cards for international purchases! Zero forex fees = more money for experiences 💰 #SmartTravel #CreditCardExpert",
       likes: 1923,
       comments: 98,
       timestamp: "1 week ago"

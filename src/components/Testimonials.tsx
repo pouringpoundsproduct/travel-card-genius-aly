@@ -8,29 +8,33 @@ export const Testimonials = () => {
       name: "Priya Sharma",
       location: "Mumbai",
       rating: 5,
-      comment: "Thanks to Aly's recommendations, I found the perfect travel card. Saved ₹50,000+ on my Europe trip with lounge access and no forex fees!",
-      image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face"
+      comment: "Thanks to Aly's recommendations, I got the HDFC Infinia Card. Saved ₹50,000+ on my Europe trip with lounge access and no forex fees!",
+      image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
+      card: "HDFC Infinia Card"
     },
     {
       name: "Rahul Mehta",
       location: "Delhi",
       rating: 5,
-      comment: "The personalized card suggestions were spot-on. My new travel card earned me enough points for a free domestic flight within 3 months!",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
+      comment: "The personalized suggestions led me to the Axis Atlas Card. Earned enough points for a free domestic flight within 3 months!",
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
+      card: "Axis Atlas Card"
     },
     {
       name: "Sneha Patel",
       location: "Bangalore",
       rating: 5,
-      comment: "Aly's exclusive deals helped me save 15% on hotel bookings. The AI assistant answered all my queries instantly. Highly recommended!",
-      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face"
+      comment: "Got the SBI Elite Card through Aly's platform. Saved 15% on hotel bookings and the AI assistant was incredibly helpful!",
+      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
+      card: "SBI Elite Card"
     },
     {
       name: "Arjun Singh",
       location: "Pune",
       rating: 5,
-      comment: "Best platform for travel card recommendations. Got approved for a premium card with ₹10L credit limit and amazing travel benefits!",
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
+      comment: "Applied for ICICI Emeralde Card and got approved with ₹10L credit limit! Amazing travel benefits and seamless experience.",
+      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
+      card: "ICICI Emeralde Card"
     }
   ];
 
@@ -88,6 +92,9 @@ export const Testimonials = () => {
                     </p>
                     <p className="text-blue-300 text-sm">
                       {testimonial.location}
+                    </p>
+                    <p className="text-green-400 text-xs font-medium">
+                      Card: {testimonial.card}
                     </p>
                   </div>
                 </div>

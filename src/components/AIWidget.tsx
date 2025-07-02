@@ -82,14 +82,14 @@ export const AIWidget = () => {
         <div className="fixed bottom-6 right-6 z-50">
           <Button
             onClick={() => setIsOpen(true)}
-            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full p-3 shadow-2xl transform transition-all duration-300 hover:scale-110"
+            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full p-4 shadow-2xl transform transition-all duration-300 hover:scale-110"
           >
-            <MessageCircle className="h-5 w-5" />
+            <MessageCircle className="h-6 w-6" />
           </Button>
           
           {/* Floating Message */}
-          <div className="absolute bottom-14 right-0 bg-white/95 backdrop-blur-sm text-gray-800 px-3 py-2 rounded-lg shadow-lg max-w-xs">
-            <p className="text-xs font-medium">Need help choosing your perfect travel card? 💬</p>
+          <div className="absolute bottom-16 right-0 bg-white/95 backdrop-blur-sm text-gray-800 px-4 py-3 rounded-lg shadow-xl max-w-xs">
+            <p className="text-sm font-medium">🤖 Chat with Aly for instant travel card advice!</p>
           </div>
         </div>
       )}
