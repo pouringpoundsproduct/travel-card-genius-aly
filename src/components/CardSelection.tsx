@@ -132,15 +132,15 @@ export const CardSelection = ({ onRecommendations }: CardSelectionProps) => {
                 <Slider
                   value={preferences.hotels_annual}
                   onValueChange={(value) => handleSliderChange('hotels_annual', value)}
-                  max={200000}
-                  min={10000}
+                  max={500000}
+                  min={0}
                   step={5000}
                   className="w-full"
                 />
                 <div className="flex justify-between text-sm text-gray-300 mt-1">
-                  <span>₹10K</span>
+                  <span>₹0</span>
                   <span className="font-bold text-blue-400">₹{preferences.hotels_annual[0].toLocaleString()}</span>
-                  <span>₹2L</span>
+                  <span>₹5L</span>
                 </div>
               </div>
             </div>
@@ -155,15 +155,15 @@ export const CardSelection = ({ onRecommendations }: CardSelectionProps) => {
                 <Slider
                   value={preferences.flights_annual}
                   onValueChange={(value) => handleSliderChange('flights_annual', value)}
-                  max={300000}
-                  min={15000}
+                  max={500000}
+                  min={0}
                   step={5000}
                   className="w-full"
                 />
                 <div className="flex justify-between text-sm text-gray-300 mt-1">
-                  <span>₹15K</span>
+                  <span>₹0</span>
                   <span className="font-bold text-purple-400">₹{preferences.flights_annual[0].toLocaleString()}</span>
-                  <span>₹3L</span>
+                  <span>₹5L</span>
                 </div>
               </div>
             </div>

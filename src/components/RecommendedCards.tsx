@@ -18,7 +18,7 @@ export const RecommendedCards = ({ cards }: RecommendedCardsProps) => {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Your Top 5 Travel Cards
+            Your Top 6 Travel Cards
           </h2>
           <p className="text-xl text-gray-300">
             Handpicked based on your spending patterns and travel preferences
@@ -26,7 +26,7 @@ export const RecommendedCards = ({ cards }: RecommendedCardsProps) => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {cards.slice(0, 5).map((card, index) => (
+          {cards.slice(0, 6).map((card, index) => (
             <Card 
               key={index}
               className="bg-white/10 backdrop-blur-lg border-white/20 hover:bg-white/20 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl group"

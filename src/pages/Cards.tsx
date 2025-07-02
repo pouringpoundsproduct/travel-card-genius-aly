@@ -1,11 +1,12 @@
 
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Star, CreditCard, IndianRupee, ExternalLink, Filter, Search } from "lucide-react";
+import { Star, CreditCard, IndianRupee, ExternalLink, Filter, Search, ArrowLeft } from "lucide-react";
 
 interface TravelCard {
   id: number;
@@ -26,6 +27,7 @@ interface TravelCard {
 }
 
 const Cards = () => {
+  const navigate = useNavigate();
   const [cards, setCards] = useState<TravelCard[]>([]);
   const [filteredCards, setFilteredCards] = useState<TravelCard[]>([]);
   const [loading, setLoading] = useState(true);
@@ -144,6 +146,16 @@ const Cards = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-blue-900 to-slate-900 py-16 px-6">
       <div className="max-w-7xl mx-auto">
+        {/* Back Button */}
+        <Button 
+          onClick={() => navigate('/')}
+          variant="outline"
+          className="mb-6 border-white/30 text-white hover:bg-white/10"
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Back to Home
+        </Button>
+
         {/* Header */}
         <div className="text-center mb-10">
           <h1 className="text-3xl md:text-5xl font-bold text-white mb-3">
@@ -292,7 +304,7 @@ const Cards = () => {
                   <Button 
                     variant="outline"
                     className="w-full border-white/30 text-white hover:bg-white/10 py-2 text-sm"
-                    onClick={() => console.log('View details for card:', card.id)}
+                    onClick={() => navigate(`/card/${card.id}`)}
                   >
                     <ExternalLink className="h-3 w-3 mr-1" />
                     View Details

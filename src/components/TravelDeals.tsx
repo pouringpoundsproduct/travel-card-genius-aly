@@ -91,7 +91,7 @@ export const TravelDeals = () => {
   };
 
   const handleViewAllOffers = () => {
-    navigate('/cards');
+    navigate('/offers');
   };
 
   return (
