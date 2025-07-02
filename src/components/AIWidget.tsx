@@ -11,7 +11,7 @@ export const AIWidget = () => {
   const [messages, setMessages] = useState([
     {
       type: 'bot',
-      content: "Hi! I'm Aly's AI assistant. Ask me anything about travel credit cards, deals, or travel tips! 🤖✈️"
+      content: "Hi! I'm Aly's travel assistant. Ask me about credit cards, travel deals, or tips! 🤖✈️"
     }
   ]);
   const [inputMessage, setInputMessage] = useState('');
@@ -54,7 +54,7 @@ export const AIWidget = () => {
       console.error('Error getting AI response:', error);
       setMessages(prev => [...prev, { 
         type: 'bot', 
-        content: "Sorry, I'm having trouble connecting right now. Please try asking about travel cards, cashback offers, or credit card recommendations!"
+        content: "Sorry, having connection issues. Please ask about travel cards, cashback offers, or recommendations!"
       }]);
       
       toast({
@@ -81,62 +81,62 @@ export const AIWidget = () => {
         <div className="fixed bottom-6 right-6 z-50">
           <Button
             onClick={() => setIsOpen(true)}
-            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full p-4 shadow-2xl transform transition-all duration-300 hover:scale-110 animate-bounce"
+            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full p-3 shadow-2xl transform transition-all duration-300 hover:scale-110"
           >
-            <MessageCircle className="h-6 w-6" />
+            <MessageCircle className="h-5 w-5" />
           </Button>
           
           {/* Floating Message */}
-          <div className="absolute bottom-16 right-0 bg-white/90 backdrop-blur-sm text-gray-800 px-4 py-2 rounded-lg shadow-lg max-w-xs animate-pulse">
-            <p className="text-sm font-medium">Need help choosing your perfect travel card? I've got you covered! 💬</p>
+          <div className="absolute bottom-14 right-0 bg-white/95 backdrop-blur-sm text-gray-800 px-3 py-2 rounded-lg shadow-lg max-w-xs">
+            <p className="text-xs font-medium">Need help choosing your perfect travel card? 💬</p>
           </div>
         </div>
       )}
 
       {/* Chat Widget */}
       {isOpen && (
-        <div className="fixed bottom-6 right-6 z-50 w-96 max-w-[90vw]">
+        <div className="fixed bottom-6 right-6 z-50 w-80 max-w-[90vw]">
           <Card className="bg-white/95 backdrop-blur-lg border-white/20 shadow-2xl">
-            <CardHeader className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-t-lg">
+            <CardHeader className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-t-lg p-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
-                  <Bot className="h-5 w-5" />
-                  <CardTitle className="text-lg">Aly's AI Assistant</CardTitle>
+                  <Bot className="h-4 w-4" />
+                  <CardTitle className="text-base">Aly's Travel Assistant</CardTitle>
                 </div>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => setIsOpen(false)}
-                  className="text-white hover:bg-white/20"
+                  className="text-white hover:bg-white/20 h-6 w-6 p-0"
                 >
-                  <X className="h-4 w-4" />
+                  <X className="h-3 w-3" />
                 </Button>
               </div>
-              <p className="text-sm text-blue-100">
+              <p className="text-xs text-blue-100">
                 Ask me about travel cards & deals!
               </p>
             </CardHeader>
 
             <CardContent className="p-0">
               {/* Messages */}
-              <div className="h-80 overflow-y-auto p-4 space-y-4">
+              <div className="h-64 overflow-y-auto p-3 space-y-3">
                 {messages.map((message, index) => (
                   <div
                     key={index}
                     className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
                   >
                     <div className={`flex items-start space-x-2 max-w-[80%] ${message.type === 'user' ? 'flex-row-reverse space-x-reverse' : ''}`}>
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${message.type === 'user' ? 'bg-blue-500' : 'bg-purple-500'}`}>
+                      <div className={`w-6 h-6 rounded-full flex items-center justify-center ${message.type === 'user' ? 'bg-blue-500' : 'bg-purple-500'}`}>
                         {message.type === 'user' ? 
-                          <User className="h-4 w-4 text-white" /> : 
-                          <Bot className="h-4 w-4 text-white" />
+                          <User className="h-3 w-3 text-white" /> : 
+                          <Bot className="h-3 w-3 text-white" />
                         }
                       </div>
-                      <div className={`px-4 py-2 rounded-lg ${message.type === 'user' 
+                      <div className={`px-3 py-2 rounded-lg ${message.type === 'user' 
                         ? 'bg-blue-500 text-white' 
                         : 'bg-gray-100 text-gray-800'
                       }`}>
-                        <p className="text-sm">{message.content}</p>
+                        <p className="text-xs">{message.content}</p>
                       </div>
                     </div>
                   </div>
@@ -145,14 +145,14 @@ export const AIWidget = () => {
                 {isLoading && (
                   <div className="flex justify-start">
                     <div className="flex items-start space-x-2">
-                      <div className="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center">
-                        <Bot className="h-4 w-4 text-white" />
+                      <div className="w-6 h-6 rounded-full bg-purple-500 flex items-center justify-center">
+                        <Bot className="h-3 w-3 text-white" />
                       </div>
-                      <div className="bg-gray-100 px-4 py-2 rounded-lg">
+                      <div className="bg-gray-100 px-3 py-2 rounded-lg">
                         <div className="flex space-x-1">
-                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                          <div className="w-1 h-1 bg-gray-400 rounded-full animate-bounce"></div>
+                          <div className="w-1 h-1 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                          <div className="w-1 h-1 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                         </div>
                       </div>
                     </div>
@@ -161,22 +161,22 @@ export const AIWidget = () => {
               </div>
 
               {/* Input */}
-              <div className="p-4 border-t">
+              <div className="p-3 border-t">
                 <div className="flex space-x-2">
                   <Input
                     value={inputMessage}
                     onChange={(e) => setInputMessage(e.target.value)}
                     onKeyPress={handleKeyPress}
                     placeholder="Ask about travel cards..."
-                    className="flex-1"
+                    className="flex-1 text-xs"
                     disabled={isLoading}
                   />
                   <Button
                     onClick={handleSendMessage}
                     disabled={!inputMessage.trim() || isLoading}
-                    className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                    className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 h-8 w-8 p-0"
                   >
-                    <Send className="h-4 w-4" />
+                    <Send className="h-3 w-3" />
                   </Button>
                 </div>
               </div>

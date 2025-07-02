@@ -15,7 +15,8 @@ interface TravelCard {
   image: string;
   joining_fee_text: string;
   annual_saving: string;
-  bk_commission: string;
+  commission: string;
+  commission_type: string;
   card_type: string;
   bank_id: number;
   product_usps: Array<{
@@ -111,18 +112,28 @@ const Cards = () => {
     return brands;
   };
 
+  const formatCommission = (commission: string, commissionType: string) => {
+    if (!commission || commission === "0") return null;
+    
+    if (commissionType === "percentage") {
+      return `${commission}% Cashback`;
+    } else {
+      return `₹${commission} Reward`;
+    }
+  };
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-900 via-blue-900 to-slate-900 py-20 px-6">
+      <div className="min-h-screen bg-gradient-to-b from-slate-900 via-blue-900 to-slate-900 py-16 px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
+          <div className="text-center mb-10">
+            <h1 className="text-3xl md:text-5xl font-bold text-white mb-3">
               Loading Your Travel Card Universe... 🚀
             </h1>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="bg-white/10 backdrop-blur-lg border-white/20 rounded-lg h-96 animate-pulse"></div>
+              <div key={i} className="bg-white/10 backdrop-blur-lg border-white/20 rounded-lg h-80 animate-pulse"></div>
             ))}
           </div>
         </div>
@@ -131,14 +142,14 @@ const Cards = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-blue-900 to-slate-900 py-20 px-6">
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-blue-900 to-slate-900 py-16 px-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
+        <div className="text-center mb-10">
+          <h1 className="text-3xl md:text-5xl font-bold text-white mb-3">
             Your Complete Travel Card Collection 🎯
           </h1>
-          <p className="text-xl text-gray-300">
+          <p className="text-lg text-gray-300">
             {filteredCards.length} Amazing Cards Ready to Transform Your Travel Experience!
           </p>
         </div>
@@ -192,15 +203,15 @@ const Cards = () => {
         </div>
 
         {/* Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredCards.map((card) => (
             <Card 
               key={card.id}
               className="bg-white/10 backdrop-blur-lg border-white/20 hover:bg-white/20 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl group"
             >
-              <CardHeader className="text-center">
+              <CardHeader className="text-center p-4">
                 {/* Card Image */}
-                <div className="w-full h-40 mb-4 rounded-lg overflow-hidden bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center">
+                <div className="w-full h-32 mb-3 rounded-lg overflow-hidden bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center">
                   {card.image ? (
                     <img 
                       src={card.image} 
@@ -211,29 +222,29 @@ const Cards = () => {
                       }}
                     />
                   ) : (
-                    <CreditCard className="h-16 w-16 text-white/50" />
+                    <CreditCard className="h-12 w-12 text-white/50" />
                   )}
                 </div>
 
-                <CardTitle className="text-xl text-white group-hover:text-blue-300 transition-colors">
+                <CardTitle className="text-lg text-white group-hover:text-blue-300 transition-colors line-clamp-2">
                   {card.name}
                 </CardTitle>
                 
                 {card.card_type && (
-                  <Badge variant="secondary" className="bg-blue-500/20 text-blue-300 border-blue-400/30">
+                  <Badge variant="secondary" className="bg-blue-500/20 text-blue-300 border-blue-400/30 text-xs">
                     {card.card_type}
                   </Badge>
                 )}
               </CardHeader>
 
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-3 p-4">
                 {/* Rating */}
                 {card.rating && (
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-300">Rating:</span>
+                    <span className="text-gray-300 text-sm">Rating:</span>
                     <div className="flex items-center space-x-1">
                       <Star className="h-4 w-4 text-yellow-400 fill-yellow-400" />
-                      <span className="text-white font-bold">
+                      <span className="text-white font-bold text-sm">
                         {card.rating}/5
                       </span>
                     </div>
@@ -242,9 +253,9 @@ const Cards = () => {
 
                 {/* Annual Fee */}
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-300">Annual Fee:</span>
-                  <span className="text-white font-bold flex items-center">
-                    <IndianRupee className="h-4 w-4" />
+                  <span className="text-gray-300 text-sm">Annual Fee:</span>
+                  <span className="text-white font-bold flex items-center text-sm">
+                    <IndianRupee className="h-3 w-3" />
                     {card.joining_fee_text || 'N/A'}
                   </span>
                 </div>
@@ -252,19 +263,19 @@ const Cards = () => {
                 {/* Yearly Savings */}
                 {card.annual_saving && (
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-300">Potential Savings:</span>
-                    <span className="text-green-400 font-bold flex items-center">
-                      <IndianRupee className="h-4 w-4" />
+                    <span className="text-gray-300 text-sm">Potential Savings:</span>
+                    <span className="text-green-400 font-bold flex items-center text-sm">
+                      <IndianRupee className="h-3 w-3" />
                       {card.annual_saving}
                     </span>
                   </div>
                 )}
 
                 {/* Commission Info */}
-                {card.bk_commission && (
-                  <div className="bg-green-500/20 border border-green-400/30 rounded-lg p-3 text-center">
+                {formatCommission(card.commission, card.commission_type) && (
+                  <div className="bg-green-500/20 border border-green-400/30 rounded-lg p-2 text-center">
                     <span className="text-green-300 text-sm font-medium">
-                      Earn ₹{card.bk_commission} Reward on Approval! 🎉
+                      Earn {formatCommission(card.commission, card.commission_type)}! 🎉
                     </span>
                   </div>
                 )}
@@ -272,7 +283,7 @@ const Cards = () => {
                 {/* Action Buttons */}
                 <div className="space-y-2">
                   <Button 
-                    className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-3"
+                    className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-2 text-sm"
                     onClick={() => window.open('#', '_blank')}
                   >
                     Apply Now 🚀
@@ -280,10 +291,10 @@ const Cards = () => {
                   
                   <Button 
                     variant="outline"
-                    className="w-full border-white/30 text-white hover:bg-white/10 py-2"
+                    className="w-full border-white/30 text-white hover:bg-white/10 py-2 text-sm"
                     onClick={() => console.log('View details for card:', card.id)}
                   >
-                    <ExternalLink className="h-4 w-4 mr-2" />
+                    <ExternalLink className="h-3 w-3 mr-1" />
                     View Details
                   </Button>
                 </div>
