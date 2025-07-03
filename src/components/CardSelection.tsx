@@ -27,7 +27,7 @@ export const CardSelection = ({ onRecommendations }: CardSelectionProps) => {
   const handleGetRecommendations = async () => {
     setIsLoading(true);
     try {
-      // Build the simplified payload for the Card Genius API
+      // Build the payload for the Card Genius API
       const recommendationPayload = {
         hotels_annual: preferences.hotels_annual[0],
         flights_annual: preferences.flights_annual[0],
@@ -36,7 +36,7 @@ export const CardSelection = ({ onRecommendations }: CardSelectionProps) => {
         selected_card_id: null
       };
 
-      console.log('Sending API request with payload:', recommendationPayload);
+      console.log('🚀 Sending API request with payload:', recommendationPayload);
 
       const personalizedResponse = await fetch('https://card-recommendation-api-v2.bankkaro.com/cg/api/pro', {
         method: 'POST',
@@ -51,30 +51,30 @@ export const CardSelection = ({ onRecommendations }: CardSelectionProps) => {
       }
 
       const personalizedData = await personalizedResponse.json();
-      console.log('API Response received:', personalizedData);
+      console.log('📋 API Response received:', personalizedData);
       
-      // Get more cards initially for filtering (up to 20 to ensure we have enough to filter)
+      // Get all cards from API response (they come in priority order: 0, 1, 2, 3, 4...)
       let allCards = personalizedData.savings || [];
-      console.log(`Total cards from API: ${allCards.length}`);
+      console.log(`📊 Total cards from API (in priority order): ${allCards.length}`);
 
-      // Apply frontend filtering based on lounge requirements
+      // Apply frontend filtering based on lounge requirements while maintaining priority order
       const filteredCards = filterCardsByLoungeRequirements(allCards, preferences);
-      console.log(`Cards after lounge filtering: ${filteredCards.length}`);
+      console.log(`🎯 Cards after lounge filtering: ${filteredCards.length}`);
       
-      // Take top 6 cards after filtering, or all available if less than 6
+      // Take top 6 cards that meet the criteria (they maintain their priority order)
       const finalCards = filteredCards.slice(0, 6);
-      console.log(`Final cards to display: ${finalCards.length}`);
+      console.log(`🏆 Final cards to display (top 6 that meet criteria): ${finalCards.length}`);
 
+      // Handle different scenarios based on filtered results
       if (finalCards.length === 0) {
         toast({
           title: "No Matching Cards Found! 😔",
-          description: "Try adjusting your lounge requirements to see more options. Consider lowering your domestic or international lounge visit requirements.",
+          description: "Try adjusting your lounge requirements. Consider lowering your domestic or international lounge visit needs to see more options.",
           variant: "destructive",
         });
         return;
       }
 
-      // Show a warning if we have fewer than 6 cards
       if (finalCards.length < 6) {
         toast({
           title: `Found ${finalCards.length} Matching Cards! 🎯`,
@@ -82,15 +82,16 @@ export const CardSelection = ({ onRecommendations }: CardSelectionProps) => {
         });
       } else {
         toast({
-          title: "Boom! 💥",
-          description: `Found ${finalCards.length} perfect travel cards that match your lounge needs!`,
+          title: "Perfect Match! 💥",
+          description: `Found ${finalCards.length} travel cards that perfectly match your lounge needs!`,
         });
       }
 
+      // Pass the filtered cards to display
       onRecommendations(preferences, finalCards);
 
     } catch (error) {
-      console.error('Error fetching recommendations:', error);
+      console.error('❌ Error fetching recommendations:', error);
       toast({
         title: "Oops! 😅",
         description: "Something went wrong. Don't worry, let's try again!",
