@@ -31,21 +31,43 @@ export const CardSelection = ({ onRecommendations }: CardSelectionProps) => {
     const requiredDomesticLounges = userPreferences.domestic_lounge_usage_quarterly[0];
     const requiredInternationalLounges = userPreferences.international_lounge_usage_quarterly[0];
 
+    console.log('User requirements:', {
+      domestic: requiredDomesticLounges,
+      international: requiredInternationalLounges
+    });
+
     return cards.filter(card => {
       // Check if card has travel benefits
       if (!card.travel_benefits) {
-        return false; // Exclude cards without travel benefits
+        console.log(`Card ${card.card_name} excluded: No travel benefits`);
+        return false;
       }
 
       // Extract lounge access from travel benefits
       const domesticLoungesOffered = card.travel_benefits.domestic_lounges_unlocked || 0;
       const internationalLoungesOffered = card.travel_benefits.international_lounges_unlocked || 0;
 
+      console.log(`Card ${card.card_name}:`, {
+        offered_domestic: domesticLoungesOffered,
+        offered_international: internationalLoungesOffered,
+        required_domestic: requiredDomesticLounges,
+        required_international: requiredInternationalLounges
+      });
+
       // Filter cards that meet or exceed the customer's lounge requirements
       const meetsDomesticRequirement = domesticLoungesOffered >= requiredDomesticLounges;
       const meetsInternationalRequirement = internationalLoungesOffered >= requiredInternationalLounges;
 
-      return meetsDomesticRequirement && meetsInternationalRequirement;
+      const passesFilter = meetsDomesticRequirement && meetsInternationalRequirement;
+      
+      if (!passesFilter) {
+        console.log(`Card ${card.card_name} excluded:`, {
+          domestic_check: meetsDomesticRequirement,
+          international_check: meetsInternationalRequirement
+        });
+      }
+
+      return passesFilter;
     });
   };
 
@@ -61,6 +83,8 @@ export const CardSelection = ({ onRecommendations }: CardSelectionProps) => {
         selected_card_id: null
       };
 
+      console.log('Sending API request with payload:', recommendationPayload);
+
       const personalizedResponse = await fetch('https://card-recommendation-api-v2.bankkaro.com/cg/api/pro', {
         method: 'POST',
         headers: {
@@ -74,33 +98,43 @@ export const CardSelection = ({ onRecommendations }: CardSelectionProps) => {
       }
 
       const personalizedData = await personalizedResponse.json();
-      console.log('API Response:', personalizedData); // Debug log to see the response structure
+      console.log('API Response received:', personalizedData);
       
-      let topCards = personalizedData.savings?.slice(0, 12) || []; // Get more cards initially for filtering
+      // Get more cards initially for filtering (up to 20 to ensure we have enough to filter)
+      let allCards = personalizedData.savings || [];
+      console.log(`Total cards from API: ${allCards.length}`);
 
       // Apply frontend filtering based on lounge requirements
-      const filteredCards = filterCardsByLoungeRequirements(topCards, preferences);
+      const filteredCards = filterCardsByLoungeRequirements(allCards, preferences);
+      console.log(`Cards after lounge filtering: ${filteredCards.length}`);
       
-      console.log('Cards after lounge filtering:', filteredCards); // Debug log
-      
-      // Take top 6 cards after filtering
+      // Take top 6 cards after filtering, or all available if less than 6
       const finalCards = filteredCards.slice(0, 6);
+      console.log(`Final cards to display: ${finalCards.length}`);
 
       if (finalCards.length === 0) {
         toast({
           title: "No Matching Cards Found! 😔",
-          description: "Try adjusting your lounge requirements to see more options.",
+          description: "Try adjusting your lounge requirements to see more options. Consider lowering your domestic or international lounge visit requirements.",
           variant: "destructive",
         });
         return;
       }
 
+      // Show a warning if we have fewer than 6 cards
+      if (finalCards.length < 6) {
+        toast({
+          title: `Found ${finalCards.length} Matching Cards! 🎯`,
+          description: `Only ${finalCards.length} cards meet your specific lounge requirements. Try adjusting your settings for more options.`,
+        });
+      } else {
+        toast({
+          title: "Boom! 💥",
+          description: `Found ${finalCards.length} perfect travel cards that match your lounge needs!`,
+        });
+      }
+
       onRecommendations(preferences, finalCards);
-      
-      toast({
-        title: "Boom! 💥",
-        description: `Found ${finalCards.length} perfect travel cards that match your lounge needs!`,
-      });
 
     } catch (error) {
       console.error('Error fetching recommendations:', error);
