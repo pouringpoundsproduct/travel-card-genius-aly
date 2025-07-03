@@ -2,17 +2,14 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Slider } from "@/components/ui/slider";
-import { Plane, Hotel, Coffee } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-
-interface CardSelectionProps {
-  onRecommendations: (preferences: any, cards: any[]) => void;
-}
+import { PreferenceSliders } from "@/components/PreferenceSliders";
+import { filterCardsByLoungeRequirements } from "@/utils/cardFiltering";
+import { UserPreferences, CardSelectionProps } from "@/types/cardSelection";
 
 export const CardSelection = ({ onRecommendations }: CardSelectionProps) => {
   const { toast } = useToast();
-  const [preferences, setPreferences] = useState({
+  const [preferences, setPreferences] = useState<UserPreferences>({
     hotels_annual: [50000],
     flights_annual: [75000],
     domestic_lounge_usage_quarterly: [10],
@@ -25,50 +22,6 @@ export const CardSelection = ({ onRecommendations }: CardSelectionProps) => {
       ...prev,
       [key]: value
     }));
-  };
-
-  const filterCardsByLoungeRequirements = (cards: any[], userPreferences: any) => {
-    const requiredDomesticLounges = userPreferences.domestic_lounge_usage_quarterly[0];
-    const requiredInternationalLounges = userPreferences.international_lounge_usage_quarterly[0];
-
-    console.log('User requirements:', {
-      domestic: requiredDomesticLounges,
-      international: requiredInternationalLounges
-    });
-
-    return cards.filter(card => {
-      // Check if card has travel benefits
-      if (!card.travel_benefits) {
-        console.log(`Card ${card.card_name} excluded: No travel benefits`);
-        return false;
-      }
-
-      // Extract lounge access from travel benefits
-      const domesticLoungesOffered = card.travel_benefits.domestic_lounges_unlocked || 0;
-      const internationalLoungesOffered = card.travel_benefits.international_lounges_unlocked || 0;
-
-      console.log(`Card ${card.card_name}:`, {
-        offered_domestic: domesticLoungesOffered,
-        offered_international: internationalLoungesOffered,
-        required_domestic: requiredDomesticLounges,
-        required_international: requiredInternationalLounges
-      });
-
-      // Filter cards that meet or exceed the customer's lounge requirements
-      const meetsDomesticRequirement = domesticLoungesOffered >= requiredDomesticLounges;
-      const meetsInternationalRequirement = internationalLoungesOffered >= requiredInternationalLounges;
-
-      const passesFilter = meetsDomesticRequirement && meetsInternationalRequirement;
-      
-      if (!passesFilter) {
-        console.log(`Card ${card.card_name} excluded:`, {
-          domestic_check: meetsDomesticRequirement,
-          international_check: meetsInternationalRequirement
-        });
-      }
-
-      return passesFilter;
-    });
   };
 
   const handleGetRecommendations = async () => {
@@ -167,92 +120,10 @@ export const CardSelection = ({ onRecommendations }: CardSelectionProps) => {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
-            {/* Hotels Annual Spend */}
-            <div className="space-y-3">
-              <div className="flex items-center space-x-3">
-                <Hotel className="h-5 w-5 text-blue-400" />
-                <label className="font-medium">How much do you spend on hotels yearly?</label>
-              </div>
-              <div className="px-2">
-                <Slider
-                  value={preferences.hotels_annual}
-                  onValueChange={(value) => handleSliderChange('hotels_annual', value)}
-                  max={500000}
-                  min={0}
-                  step={5000}
-                  className="w-full"
-                />
-                <div className="flex justify-between text-sm text-gray-300 mt-1">
-                  <span>₹0</span>
-                  <span className="font-bold text-blue-400">₹{preferences.hotels_annual[0].toLocaleString()}</span>
-                  <span>₹5L</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Flights Annual Spend */}
-            <div className="space-y-3">
-              <div className="flex items-center space-x-3">
-                <Plane className="h-5 w-5 text-purple-400" />
-                <label className="font-medium">Annual flight bookings budget?</label>
-              </div>
-              <div className="px-2">
-                <Slider
-                  value={preferences.flights_annual}
-                  onValueChange={(value) => handleSliderChange('flights_annual', value)}
-                  max={500000}
-                  min={0}
-                  step={5000}
-                  className="w-full"
-                />
-                <div className="flex justify-between text-sm text-gray-300 mt-1">
-                  <span>₹0</span>
-                  <span className="font-bold text-purple-400">₹{preferences.flights_annual[0].toLocaleString()}</span>
-                  <span>₹5L</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Compact Lounge Section */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Domestic Lounge */}
-              <div className="space-y-2">
-                <div className="flex items-center space-x-2">
-                  <Coffee className="h-4 w-4 text-green-400" />
-                  <label className="text-sm font-medium">Domestic Lounge Visits Annually</label>
-                </div>
-                <Slider
-                  value={preferences.domestic_lounge_usage_quarterly}
-                  onValueChange={(value) => handleSliderChange('domestic_lounge_usage_quarterly', value)}
-                  max={30}
-                  min={0}
-                  step={1}
-                  className="w-full"
-                />
-                <div className="text-center">
-                  <span className="font-bold text-green-400 text-sm">{preferences.domestic_lounge_usage_quarterly[0]} visits</span>
-                </div>
-              </div>
-
-              {/* International Lounge */}
-              <div className="space-y-2">
-                <div className="flex items-center space-x-2">
-                  <Coffee className="h-4 w-4 text-yellow-400" />
-                  <label className="text-sm font-medium">International Lounge Visits Annually</label>
-                </div>
-                <Slider
-                  value={preferences.international_lounge_usage_quarterly}
-                  onValueChange={(value) => handleSliderChange('international_lounge_usage_quarterly', value)}
-                  max={20}
-                  min={0}
-                  step={1}
-                  className="w-full"
-                />
-                <div className="text-center">
-                  <span className="font-bold text-yellow-400 text-sm">{preferences.international_lounge_usage_quarterly[0]} visits</span>
-                </div>
-              </div>
-            </div>
+            <PreferenceSliders 
+              preferences={preferences}
+              onSliderChange={handleSliderChange}
+            />
 
             <div className="pt-4 text-center">
               <Button 
