@@ -27,6 +27,28 @@ export const CardSelection = ({ onRecommendations }: CardSelectionProps) => {
     }));
   };
 
+  const filterCardsByLoungeRequirements = (cards: any[], userPreferences: any) => {
+    const requiredDomesticLounges = userPreferences.domestic_lounge_usage_quarterly[0];
+    const requiredInternationalLounges = userPreferences.international_lounge_usage_quarterly[0];
+
+    return cards.filter(card => {
+      // Check if card has travel benefits
+      if (!card.travel_benefits) {
+        return false; // Exclude cards without travel benefits
+      }
+
+      // Extract lounge access from travel benefits
+      const domesticLoungesOffered = card.travel_benefits.domestic_lounges_unlocked || 0;
+      const internationalLoungesOffered = card.travel_benefits.international_lounges_unlocked || 0;
+
+      // Filter cards that meet or exceed the customer's lounge requirements
+      const meetsDomesticRequirement = domesticLoungesOffered >= requiredDomesticLounges;
+      const meetsInternationalRequirement = internationalLoungesOffered >= requiredInternationalLounges;
+
+      return meetsDomesticRequirement && meetsInternationalRequirement;
+    });
+  };
+
   const handleGetRecommendations = async () => {
     setIsLoading(true);
     try {
@@ -52,13 +74,32 @@ export const CardSelection = ({ onRecommendations }: CardSelectionProps) => {
       }
 
       const personalizedData = await personalizedResponse.json();
-      const topCards = personalizedData.savings?.slice(0, 6) || [];
+      console.log('API Response:', personalizedData); // Debug log to see the response structure
+      
+      let topCards = personalizedData.savings?.slice(0, 12) || []; // Get more cards initially for filtering
 
-      onRecommendations(preferences, topCards);
+      // Apply frontend filtering based on lounge requirements
+      const filteredCards = filterCardsByLoungeRequirements(topCards, preferences);
+      
+      console.log('Cards after lounge filtering:', filteredCards); // Debug log
+      
+      // Take top 6 cards after filtering
+      const finalCards = filteredCards.slice(0, 6);
+
+      if (finalCards.length === 0) {
+        toast({
+          title: "No Matching Cards Found! 😔",
+          description: "Try adjusting your lounge requirements to see more options.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      onRecommendations(preferences, finalCards);
       
       toast({
         title: "Boom! 💥",
-        description: "Found your perfect travel cards! Get ready to save big!",
+        description: `Found ${finalCards.length} perfect travel cards that match your lounge needs!`,
       });
 
     } catch (error) {
@@ -178,7 +219,6 @@ export const CardSelection = ({ onRecommendations }: CardSelectionProps) => {
                 </div>
               </div>
             </div>
-
 
             <div className="pt-4 text-center">
               <Button 
